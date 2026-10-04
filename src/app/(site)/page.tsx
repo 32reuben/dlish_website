@@ -30,9 +30,9 @@ export default async function Home() {
   ])
 
   // Get products for the premium scroll experiences
-  const milkshake = products?.find(p => p.slug === 'vanilla-shake') || products?.find(p => p.categorySlug === 'milk-shakes') || { name: 'Vanilla Milkshake', price: 549, desc: 'A rich and creamy classic, blended to perfection for serious cravings.' }
-  const bubbleTea = products?.find(p => p.slug === 'mango-passion') || products?.find(p => p.categorySlug === 'fizzy-bubble-tea') || { name: 'Mango Passion', price: 749, desc: 'Refreshing and bold. Chewy tapioca pearls in our signature brewed tea.' }
-  const frappe = products?.find(p => p.slug === 'blueberry-matcha') || products?.find(p => p.categorySlug === 'matcha') || { name: 'Blueberry Matcha', price: 649, desc: 'The ultimate indulgence. Ice blended to frosty perfection.' }
+  const milkshake = products?.find(p => p.slug === 'vanilla-milkshake') || products?.find(p => p.categorySlug === 'milkshakes') || { name: 'Vanilla Milkshake', price: 549, desc: 'A rich and creamy classic, blended to perfection for serious cravings.' }
+  const bubbleTea = products?.find(p => p.slug === 'mango-passion') || products?.find(p => p.categorySlug === 'bubble-tea') || { name: 'Mango Passion', price: 749, desc: 'Refreshing and bold. Chewy tapioca pearls in our signature brewed tea.' }
+  const frappe = products?.find(p => p.slug === 'chocolate-iced-frappe') || products?.find(p => p.categorySlug === 'iced-frappes') || { name: 'Chocolate Iced Frappe', price: 649, desc: 'The ultimate indulgence. Ice blended to frosty perfection.' }
 
   return (
     <div className="flex flex-col pb-20">
@@ -54,10 +54,12 @@ export default async function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categories.map((cat) => {
+            {categories.map((cat, index) => {
               const Icon = cat.iconType || Utensils // Use Sanity image or fallback icon
+              const colors = ['bg-brand-bubbletea', 'bg-green-100', 'bg-pink-100', 'bg-orange-100', 'bg-yellow-100', 'bg-brand-streetfood', 'bg-brand-karak', 'bg-brand-protein'];
+              const color = cat.color || colors[index % colors.length];
               return (
-                <Link href={`/menu#${cat.slug}`} key={cat._id} className={`group relative overflow-hidden rounded-3xl ${cat.color || 'bg-white'} p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all`}>
+                <Link href={`/menu#${cat.slug}`} key={cat._id} className={`group relative overflow-hidden rounded-3xl ${color} p-6 flex flex-col items-center text-center hover:shadow-xl hover:-translate-y-1 transition-all`}>
                   <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-brand-dark mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     {cat.icon ? (
                       <Image src={cat.icon} alt={cat.name} width={40} height={40} className="w-10 h-10 object-contain" />

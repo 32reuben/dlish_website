@@ -4,7 +4,6 @@ export const getCategoriesQuery = groq`*[_type == "category" && visible == true]
   _id,
   name,
   "slug": slug.current,
-  "color": "bg-brand-dark", // Placeholder for actual color field if added later
   "icon": icon.asset->url
 }`
 
