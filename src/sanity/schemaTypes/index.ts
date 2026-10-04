@@ -23,6 +23,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       { name: 'shortDescription', title: 'Short Description', type: 'text' },
       { name: 'image', title: 'Image', type: 'image' },
       { name: 'basePrice', title: 'Base Price (pence)', type: 'number', validation: (rule) => rule.required().integer().min(0) },
+      { name: 'sizes', title: 'Sizes (Display Only)', type: 'array', of: [{ type: 'object', fields: [{name: 'name', type: 'string'}, {name: 'price', type: 'number', title: 'Price (pence)'}] }] },
       { name: 'category', title: 'Category', type: 'reference', to: [{ type: 'category' }] },
       { name: 'available', title: 'Available', type: 'boolean', initialValue: true },
       { name: 'badges', title: 'Badges', type: 'array', of: [{ type: 'string' }], options: { list: ['TRENDING', 'NEW', 'BESTSELLER', 'LIMITED EDITION'] } },
@@ -92,15 +93,21 @@ export const schemaTypes: SchemaTypeDefinition[] = [
     fields: [
       { name: 'title', title: 'Settings Document Title', type: 'string', initialValue: 'Global Site Settings', readOnly: true },
       { name: 'address', title: 'Address', type: 'text' },
+      { name: 'mapsLink', title: 'Google Maps Short Link', type: 'url', description: 'e.g. https://maps.app.goo.gl/...' },
       { name: 'openingHours', title: 'Opening Hours', type: 'text' },
       { name: 'phone', title: 'Phone', type: 'string' },
       { name: 'email', title: 'Email', type: 'string' },
       { name: 'whatsappNumber', title: 'WhatsApp Number', type: 'string', description: 'Include country code, e.g. +447...' },
-      { name: 'orderLinkType', title: 'Order Link Type', type: 'string', options: { list: ['WhatsApp', 'Phone', 'URL'] } },
-      { name: 'orderLinkTarget', title: 'Order Link Target', type: 'string', description: 'URL or Phone number depending on type' },
+      { name: 'justEatUrl', title: 'Just Eat URL', type: 'url' },
+      { name: 'uberEatsUrl', title: 'Uber Eats URL', type: 'url' },
+      { name: 'showCallInChooser', title: 'Show "Call us" in Order Chooser', type: 'boolean', initialValue: false },
+      { name: 'googleProfileUrl', title: 'Google Business Profile URL', type: 'url' },
+      { name: 'googleReviewUrl', title: 'Google "Write a Review" URL', type: 'url' },
+      { name: 'instagramUrl', title: 'Instagram URL', type: 'url' },
+      { name: 'facebookUrl', title: 'Facebook URL', type: 'url' },
+      { name: 'tiktokUrl', title: 'TikTok URL', type: 'url' },
       { name: 'collectionInfo', title: 'Collection Info', type: 'text' },
       { name: 'deliveryInfo', title: 'Delivery Info', type: 'text' },
-      { name: 'socialLinks', title: 'Social Links', type: 'array', of: [{ type: 'object', fields: [{name: 'platform', type: 'string'}, {name: 'url', type: 'url'}] }] },
       { name: 'mapEmbedUrl', title: 'Map Embed URL', type: 'url' },
     ],
   },
@@ -114,5 +121,29 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       { name: 'foodCategories', title: 'Food Categories', type: 'array', of: [{ type: 'string' }] },
       { name: 'eventTypes', title: 'Event Types', type: 'array', of: [{ type: 'string' }] },
     ],
+  },
+  {
+    name: 'testimonial',
+    title: 'Testimonial (Google Review)',
+    type: 'document',
+    fields: [
+      { name: 'displayName', title: 'Display Name (e.g. Rosie N.)', type: 'string', validation: (rule) => rule.required() },
+      { name: 'text', title: 'Review Text', type: 'text', validation: (rule) => rule.required() },
+      { name: 'source', title: 'Source', type: 'string', initialValue: 'Google review', readOnly: true },
+      { name: 'order', title: 'Order', type: 'number' },
+      { name: 'visible', title: 'Visible', type: 'boolean', initialValue: true },
+    ],
+  },
+  {
+    name: 'announcementBar',
+    title: 'Announcement Bar',
+    type: 'document',
+    fields: [
+      { name: 'title', title: 'Settings Document Title', type: 'string', initialValue: 'Global Announcement Bar', readOnly: true },
+      { name: 'isActive', title: 'Is Active', type: 'boolean', initialValue: false },
+      { name: 'text', title: 'Announcement Text', type: 'string', validation: (rule) => rule.required() },
+      { name: 'linkUrl', title: 'Optional Link URL', type: 'url' },
+      { name: 'hideAfter', title: 'Hide After (Date & Time)', type: 'datetime' }
+    ]
   }
 ]

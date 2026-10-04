@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka, Quicksand } from "next/font/google";
 import "./globals.css";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -27,13 +25,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fredoka.variable} ${quicksand.variable} antialiased scroll-smooth`}>
-      <body className="font-sans bg-stone-50 text-stone-900 min-h-screen flex flex-col selection:bg-brand-bubbletea selection:text-white">
-        <Navigation />
-        <main className="flex-1 flex flex-col">
-          {children}
-        </main>
-        <Footer />
+    <html lang="en" className={`${fredoka.variable} ${quicksand.variable} antialiased`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+              }
+              window.onbeforeunload = function () {
+                window.scrollTo(0, 0);
+              };
+              window.scrollTo(0, 0);
+            `,
+          }}
+        />
+      </head>
+      <body className="font-sans bg-brand-light text-brand-dark min-h-screen flex flex-col selection:bg-brand-accent selection:text-white">
+        {children}
       </body>
     </html>
   );

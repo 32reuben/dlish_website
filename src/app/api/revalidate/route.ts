@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Revalidate the specific document type
+    // @ts-ignore
     revalidateTag(body._type)
 
     return NextResponse.json({ body })

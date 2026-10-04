@@ -27,6 +27,7 @@ export const getProductsQuery = groq`*[_type == "product"] {
   "slug": slug.current,
   "desc": shortDescription,
   "price": basePrice,
+  sizes,
   "image": image.asset->url,
   "categorySlug": category->slug.current,
   available,
@@ -36,6 +37,32 @@ export const getProductsQuery = groq`*[_type == "product"] {
   popular
 }`
 
-export const getSiteSettingsQuery = groq`*[_type == "siteSettings"][0]`
+export const getSiteSettingsQuery = `*[_type == "siteSettings"][0]{
+  address,
+  openingHours,
+  phone,
+  email,
+  whatsappNumber,
+  mapsLink,
+  justEatUrl,
+  uberEatsUrl,
+  showCallInChooser,
+  googleProfileUrl,
+  googleReviewUrl,
+  instagramUrl,
+  facebookUrl,
+  tiktokUrl,
+  collectionInfo,
+  deliveryInfo,
+  mapEmbedUrl
+}`
 
 export const getCateringPageQuery = groq`*[_type == "cateringPage"][0]`
+
+export const getTestimonialsQuery = groq`*[_type == "testimonial" && visible == true] | order(order asc) {
+  displayName,
+  text,
+  source
+}`
+
+export const getAnnouncementQuery = groq`*[_type == "announcementBar"][0]`

@@ -15,20 +15,30 @@ export function StructuredData({ data }: StructuredDataProps) {
 }
 
 export function generateLocalBusinessData(settings: any) {
+  const sameAs = [
+    settings?.googleProfileUrl,
+    settings?.instagramUrl,
+    settings?.facebookUrl,
+    settings?.tiktokUrl,
+    settings?.justEatUrl,
+    settings?.uberEatsUrl,
+  ].filter(Boolean)
+
   return {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "name": "D'Lish",
-    "image": "https://dlish.example.com/logo.png",
+    "image": "https://dlish.example.com/logo-main.png",
     "@id": "https://dlish.example.com",
     "url": "https://dlish.example.com",
-    "telephone": settings?.phone,
+    "telephone": settings?.whatsappNumber || settings?.phone,
     "address": {
       "@type": "PostalAddress",
       "streetAddress": settings?.address,
       "addressLocality": "Northampton",
       "addressCountry": "UK"
     },
+    "sameAs": sameAs,
     "servesCuisine": ["Bubble Tea", "Indian Street Food", "Desserts"],
     "priceRange": "£",
     "openingHoursSpecification": [
@@ -37,8 +47,8 @@ export function generateLocalBusinessData(settings: any) {
         "dayOfWeek": [
           "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         ],
-        "opens": "11:00",
-        "closes": "22:00"
+        "opens": "09:00",
+        "closes": "19:00"
       }
     ]
   }

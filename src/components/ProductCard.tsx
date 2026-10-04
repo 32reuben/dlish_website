@@ -16,11 +16,10 @@ export interface Product {
   badges?: string[];
   allergens?: string[];
   dietaryTags?: string[];
-  popular?: boolean;
+  sizes?: {name: string; price: number}[];
 }
 
 export function ProductCard({ product }: { product: Product }) {
-  const isBubbleTea = product.categorySlug === "bubble-tea";
   const badge = product.badges?.[0]?.toLowerCase() as any;
 
   return (
@@ -33,9 +32,9 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
 
       {/* Image */}
-      <div className="w-full aspect-square rounded-2xl bg-stone-100 overflow-hidden mb-4 relative flex items-center justify-center">
+      <div className="w-full aspect-square rounded-2xl bg-stone-50 overflow-hidden mb-4 relative flex items-center justify-center">
         {product.image ? (
-          <Image src={product.image} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+          <Image src={product.image} alt={product.name} fill className="object-contain p-6 group-hover:scale-110 transition-transform duration-500 drop-shadow-md" />
         ) : (
           <div className="text-stone-300 font-display text-2xl font-bold">D'LISH</div>
         )}
@@ -61,21 +60,20 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
 
       {/* Footer / Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-stone-100">
-        <span className="font-display text-xl font-bold text-brand-dark">{formatPrice(product.price)}</span>
-        
-        {product.available ? (
-          isBubbleTea ? (
-            <Link href={`/bubble-tea/${product.slug}`} className="bg-brand-bubbletea text-white px-4 py-2 rounded-full font-bold text-sm shadow-md shadow-brand-bubbletea/30 hover:bg-fuchsia-600 transition-colors">
-              Customise
-            </Link>
-          ) : (
-            <button className="w-10 h-10 rounded-full bg-stone-100 text-brand-dark flex items-center justify-center hover:bg-brand-dark hover:text-white transition-colors">
-              <Plus className="w-5 h-5" />
-            </button>
-          )
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-stone-100 gap-4 sm:gap-2">
+        {product.sizes && product.sizes.length > 0 ? (
+          <div className="font-bold text-brand-dark text-sm sm:text-base leading-tight">
+            {product.sizes.map((s, i) => (
+              <span key={i}>
+                {s.name} {formatPrice(s.price)}
+                {i < product.sizes!.length - 1 && " · "}
+              </span>
+            ))}
+          </div>
         ) : (
-          <span className="text-sm font-bold text-stone-400 uppercase tracking-wider">Sold Out</span>
+          product.price !== undefined && product.price !== null && (
+            <span className="font-display text-xl font-bold text-brand-dark">{formatPrice(product.price)}</span>
+          )
         )}
       </div>
     </div>

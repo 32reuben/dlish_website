@@ -21,7 +21,7 @@ export default async function FindUsPage() {
         <p className="text-stone-500 font-medium text-lg">We can't wait to see you.</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 items-start">
+      <div className="max-w-2xl mx-auto items-start">
         {/* Info Column */}
         <div className="bg-white rounded-3xl p-8 border border-stone-100 shadow-sm flex flex-col gap-8">
           
@@ -33,7 +33,7 @@ export default async function FindUsPage() {
               <h3 className="font-bold text-xl mb-1 text-brand-dark">Address</h3>
               <p className="text-stone-600 whitespace-pre-line">{settings?.address}</p>
               <Button variant="outline" size="sm" className="mt-3" asChild>
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(settings?.address || 'Northampton')}`} target="_blank" rel="noopener noreferrer">
+                <a href={settings?.mapsLink || `https://maps.google.com/?q=${encodeURIComponent(settings?.address || 'Northampton')}`} target="_blank" rel="noopener noreferrer">
                   <Navigation className="w-4 h-4 mr-2" /> Get Directions
                 </a>
               </Button>
@@ -57,14 +57,13 @@ export default async function FindUsPage() {
             <div>
               <h3 className="font-bold text-xl mb-1 text-brand-dark">Contact</h3>
               <div className="flex flex-col gap-1 text-stone-600 mb-3">
-                <a href={`tel:${settings?.phone}`} className="hover:text-brand-bubbletea transition-colors flex items-center gap-2"><Phone className="w-4 h-4"/> {settings?.phone}</a>
-                <a href={`mailto:${settings?.email}`} className="hover:text-brand-bubbletea transition-colors flex items-center gap-2"><Mail className="w-4 h-4"/> {settings?.email}</a>
+                {settings?.phone && (
+                  <a href={`tel:${settings.phone.replace(/\s+/g, '')}`} className="hover:text-brand-bubbletea transition-colors flex items-center gap-2"><Phone className="w-4 h-4"/> {settings.phone}</a>
+                )}
+                {settings?.email && (
+                  <a href={`mailto:${settings.email}`} className="hover:text-brand-bubbletea transition-colors flex items-center gap-2"><Mail className="w-4 h-4"/> {settings.email}</a>
+                )}
               </div>
-              <Button size="sm" className="bg-[#25D366] hover:bg-[#128C7E] text-white border-none shadow-md" asChild>
-                <a href={`https://wa.me/${settings?.whatsappNumber?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp Us
-                </a>
-              </Button>
             </div>
           </div>
 
@@ -85,25 +84,6 @@ export default async function FindUsPage() {
             </div>
           </div>
 
-        </div>
-
-        {/* Map Column */}
-        <div className="bg-stone-200 rounded-3xl h-full min-h-[400px] overflow-hidden relative shadow-inner">
-          {settings?.mapEmbedUrl ? (
-            <iframe 
-              src={settings.mapEmbedUrl} 
-              width="100%" 
-              height="100%" 
-              style={{ border: 0, position: 'absolute', top: 0, left: 0 }} 
-              allowFullScreen={false} 
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-stone-400 font-bold">
-              Map View Unavailable
-            </div>
-          )}
         </div>
       </div>
     </div>

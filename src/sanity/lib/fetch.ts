@@ -1,43 +1,99 @@
 import { client } from './client'
 import { projectId } from '../env'
-import { getCategoriesQuery, getTrendingSectionQuery, getProductsQuery, getSiteSettingsQuery, getCateringPageQuery } from './queries'
-import { Coffee, Utensils, IceCream, Carrot } from 'lucide-react'
+import { getCategoriesQuery, getTrendingSectionQuery, getProductsQuery, getSiteSettingsQuery, getCateringPageQuery, getTestimonialsQuery, getAnnouncementQuery } from './queries'
+import { Coffee, Utensils, IceCream, Carrot, CupSoda, Sandwich } from 'lucide-react'
 
 // Placeholder Mock Data
 const MOCK_CATEGORIES = [
-  { _id: '1', name: "Bubble Tea", slug: "bubble-tea", color: "bg-brand-bubbletea", iconType: Coffee },
-  { _id: '2', name: "Karak & Hot Drinks", slug: "karak", color: "bg-brand-karak", iconType: Coffee },
-  { _id: '3', name: "Indian Street Food", slug: "street-food", color: "bg-brand-streetfood", iconType: Utensils },
-  { _id: '4', name: "Desserts & Cakes", slug: "desserts", color: "bg-brand-dessert", iconType: IceCream },
-  { _id: '5', name: "Protein Meals", slug: "protein-meals", color: "bg-brand-protein", iconType: Carrot },
+  { _id: '1', name: "Fizzy Bubble Tea", slug: "fizzy-bubble-tea", color: "bg-brand-bubbletea", iconType: CupSoda },
+  { _id: '2', name: "Matcha", slug: "matcha", color: "bg-green-100", iconType: CupSoda },
+  { _id: '3', name: "Milk Shakes", slug: "milk-shakes", color: "bg-pink-100", iconType: IceCream },
+  { _id: '4', name: "Iced Frappe", slug: "iced-frappe", color: "bg-orange-100", iconType: IceCream },
+  { _id: '5', name: "Lassi", slug: "lassi", color: "bg-yellow-100", iconType: CupSoda },
+  { _id: '6', name: "Indian Bites", slug: "indian-bites", color: "bg-brand-streetfood", iconType: Sandwich },
+  { _id: '7', name: "Hot Drinks", slug: "hot-drinks", color: "bg-brand-karak", iconType: Coffee },
+  { _id: '8', name: "Protein Meals (Coming Soon)", slug: "protein-meals", color: "bg-brand-protein", iconType: Carrot },
 ]
 
-const MOCK_PRODUCTS = [
-  { _id: '101', name: "Brown Sugar Boba", slug: "brown-sugar-boba", desc: "Classic milk tea with warm brown sugar tapioca pearls.", price: 450, categorySlug: "bubble-tea", available: true, badges: ["TRENDING"], allergens: ["Milk"], popular: true },
-  { _id: '102', name: "Classic Karak Chai", slug: "classic-karak", desc: "Slow-brewed spiced tea with evaporated milk.", price: 250, categorySlug: "karak", available: true, badges: ["BESTSELLER"], allergens: ["Milk"], dietaryTags: ["Vegetarian"], popular: true },
-  { _id: '103', name: "Spicy Pani Puri", slug: "spicy-pani-puri", desc: "Crispy hollow spheres filled with spicy tangy water.", price: 500, categorySlug: "street-food", available: true, badges: ["BESTSELLER"], allergens: ["Cereals containing gluten"], dietaryTags: ["Vegetarian", "Vegan"], popular: true },
-  { _id: '104', name: "Smashed Samosa Chaat", slug: "samosa-chaat", desc: "Crispy samosas topped with chickpeas, yogurt and chutneys.", price: 650, categorySlug: "street-food", available: true, badges: [], allergens: ["Cereals containing gluten", "Milk"], dietaryTags: ["Vegetarian"] },
-  { _id: '105', name: "Lean Chicken Box", slug: "lean-chicken-box", desc: "Grilled chicken with quinoa, broccoli and light sauce.", price: 850, categorySlug: "protein-meals", available: true, badges: ["NEW"], allergens: [], popular: false },
-  { _id: '106', name: "Mango Fruit Tea", slug: "mango-fruit-tea", desc: "Refreshing jasmine green tea with sweet mango.", price: 400, categorySlug: "bubble-tea", available: true, badges: [], allergens: [], dietaryTags: ["Vegan"] },
-  { _id: '107', name: "Unavailable Cake", slug: "sold-out-cake", desc: "Delicious cake that is currently sold out.", price: 400, categorySlug: "desserts", available: false, badges: [], allergens: ["Milk", "Eggs", "Cereals containing gluten"], dietaryTags: ["Vegetarian"] },
+const MOCK_PRODUCTS: any[] = [
+  { _id: '201', name: "Strawberry Spark", desc: "Strawberry Sparkling", slug: "strawberry-spark", price: 749, categorySlug: "fizzy-bubble-tea", available: true, badges: ["NEW"], image: "/products/strawberry spark.png" },
+  { _id: '202', name: "Watermelon Breeze", desc: "Watermelon, Lemon & Mint", slug: "watermelon-breeze", price: 749, categorySlug: "fizzy-bubble-tea", available: true, badges: ["NEW"], image: "/products/watermelon breeze.png" },
+  { _id: '203', name: "Green Apple Zing", desc: "Green Apple, Lime Soda", slug: "green-apple-zing", price: 749, categorySlug: "fizzy-bubble-tea", available: true, badges: ["NEW"], image: "/products/green apple zing.png" },
+  { _id: '204', name: "Mango Passion", desc: "Mango Passion Fruit", slug: "mango-passion", price: 749, categorySlug: "fizzy-bubble-tea", available: true, badges: ["NEW"], image: "/products/mango passion.png" },
+  { _id: '205', name: "Sunset Fusion", desc: "Blueberry & Lychee", slug: "sunset-fusion", price: 749, categorySlug: "fizzy-bubble-tea", available: true, badges: ["NEW"], image: "/products/sunset fusion.png" },
+  
+  { _id: '301', name: "Blueberry Matcha", slug: "blueberry-matcha", price: 649, categorySlug: "matcha", available: true, image: "/products/blueberry matcha.png" },
+  { _id: '302', name: "Mango Matcha", slug: "mango-matcha", price: 649, categorySlug: "matcha", available: true, image: "/products/mango matcha.png" },
+  { _id: '303', name: "Banana Matcha", slug: "banana-matcha", price: 649, categorySlug: "matcha", available: true, image: "/products/banana matcha.png" },
+  { _id: '304', name: "Strawberry Matcha Latte", slug: "strawberry-matcha-latte", price: 649, categorySlug: "matcha", available: true, image: "/products/strawberry matcha.png" },
+  
+  { _id: '401', name: "Chocolate", slug: "chocolate-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/choclate milkshake.png" },
+  { _id: '402', name: "Vanilla", slug: "vanilla-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/vanila milkshake.png" },
+  { _id: '403', name: "Strawberry", slug: "strawberry-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/strawberry milkshake.png" },
+  { _id: '404', name: "Banana", slug: "banana-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/banana milkshake.png" },
+  { _id: '405', name: "Ferrero", slug: "ferrero-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/ferrero milkshake.png" },
+  { _id: '406', name: "Oreo", slug: "oreo-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/oreo milkshake.png" },
+  { _id: '407', name: "Kinder Bueno", slug: "kinder-bueno-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/kinder bueno milkshake.png" },
+  { _id: '408', name: "Biscoff", slug: "biscoff-shake", price: 549, categorySlug: "milk-shakes", available: true, image: "/products/biscoff milkshake.png" },
+  
+  { _id: '501', name: "Chocolate", slug: "chocolate-frappe", price: 375, categorySlug: "iced-frappe", available: true, badges: ["NEW"], image: "/products/chocolate iced frappe.png" },
+  { _id: '502', name: "Vanilla", slug: "vanilla-frappe", price: 375, categorySlug: "iced-frappe", available: true, badges: ["NEW"], image: "/products/vanila iced frappe.png" },
+  { _id: '503', name: "Salted Caramel", slug: "salted-caramel-frappe", price: 499, categorySlug: "iced-frappe", available: true, badges: ["Premium Frappe", "NEW"], image: "/products/salted caramel iced frappe.png" },
+  { _id: '504', name: "Biscoff", slug: "biscoff-frappe", price: 499, categorySlug: "iced-frappe", available: true, badges: ["Premium Frappe", "NEW"], image: "/products/biscoff iced frappe.png" },
+  
+  { _id: '601', name: "Plain Lassi", slug: "plain-lassi", price: 399, categorySlug: "lassi", available: true, image: "/products/plain lassi.png" },
+  { _id: '602', name: "Mango Lassi", slug: "mango-lassi", price: 449, categorySlug: "lassi", available: true, image: "/products/mango lassi.png" },
+  
+  { _id: '701', name: "Samosa (1 piece)", slug: "samosa-1", price: 150, categorySlug: "indian-bites", available: true, image: "/products/samosa (1piece).png" },
+  { _id: '702', name: "Samosa (2 pieces)", slug: "samosa-2", price: 275, categorySlug: "indian-bites", available: true, image: "/products/samosa(2 piece).png" },
+  { _id: '703', name: "Spring Roll (3 pieces)", slug: "spring-roll-3", price: 299, categorySlug: "indian-bites", available: true, image: "/products/spring roll.png" },
+  { _id: '704', name: "Pani Puri Classic (5 pieces)", slug: "pani-puri-5", price: 499, categorySlug: "indian-bites", available: true, image: "/products/panu puri classic (5 pieces).png" },
+  { _id: '705', name: "Pani Puri Premium (8 pieces)", slug: "pani-puri-8", price: 649, categorySlug: "indian-bites", available: true, image: "/products/pani puri premium (8 pieces).png" },
+  
+  { _id: '801', name: "Karak Tea", slug: "karak-tea", price: 249, categorySlug: "hot-drinks", available: true, image: "/products/karak tea.png" },
+  { _id: '802', name: "Coffee", slug: "coffee", price: 249, categorySlug: "hot-drinks", available: true, image: "/products/coffee.png" },
+  
+  { _id: '901', name: "Lean Chicken Box", slug: "lean-chicken-box", categorySlug: "protein-meals", available: false, badges: ["Coming Soon"] },
+]
+
+const MOCK_TESTIMONIALS = [
+  { displayName: "Rosie N.", text: "The white matcha is soooo good! Highly recommend", source: "Google review" },
+  { displayName: "Revathi M.", text: "Very tasty churros and refreshing drinks thank you so much 👌 We will back again 😍", source: "Google review" },
+  { displayName: "Georgiana J.", text: "New favourite boba shop in northampton. The staff are very friends and the service is speedy.", source: "Google review" },
+  { displayName: "Anjali J.", text: "Great drinks and wonderful customer service. The milk tea (taro) was amazing", source: "Google review" },
+  { displayName: "F.H.", text: "Best churros and great staff friendly. Will definitely back again! Yummy I ate all of it!", source: "Google review" },
+  { displayName: "Safewan", text: "First time trying matcha and the gentleman didn't disappoint customer service was on point 10/10 experience", source: "Google review" },
 ]
 
 const MOCK_TRENDING = {
   title: "Trending at D'Lish",
-  items: MOCK_PRODUCTS.filter(p => p.badges?.includes("TRENDING") || p.badges?.includes("BESTSELLER") || p.badges?.includes("NEW"))
+  items: MOCK_PRODUCTS.filter(p => ["201", "202", "203", "204", "205"].includes(p._id))
 }
 
+const MOCK_ANNOUNCEMENT = {
+  isActive: true,
+  text: "Coming back 8 October. Open 9 AM to 7 PM."
+}
+
+// MOCK_SITE_SETTINGS
 const MOCK_SITE_SETTINGS = {
-  orderLinkType: 'WhatsApp',
-  orderLinkTarget: '447000000000',
-  whatsappNumber: '447000000000',
-  phone: '01234 567890',
-  email: 'info@dlish.example.com',
-  address: '123 High Street, Northampton, NN1 1AA, UK',
-  openingHours: 'Mon-Sun: 11:00 AM - 10:00 PM',
+  justEatUrl: 'https://www.just-eat.co.uk/restaurants-dlish-desserts-northampton/menu',
+  uberEatsUrl: 'https://www.ubereats.com/store/dlish-desserts/4wwIh-i5TGOjMY7bZCnSSw',
+  showCallInChooser: false,
+  phone: '07850 536587',
+  whatsappNumber: '+447850536587',
+  email: 'uk.dlish@gmail.com',
+  address: "D'lish Northampton",
+  mapsLink: 'https://maps.app.goo.gl/QFv9h1fsUjyiEuVM8',
+  openingHours: '9:00 AM to 7:00 PM. Days: not confirmed.',
+  googleProfileUrl: 'https://g.page/placeholder',
+  googleReviewUrl: '',
+  instagramUrl: 'https://www.instagram.com/uk.dlish?stkn=ZTlycWY3NGZoczdw&utm_source=qr',
+  facebookUrl: '',
+  tiktokUrl: '',
   collectionInfo: 'Collection is available during all opening hours. Please wait for your confirmation message before arriving.',
   deliveryInfo: 'Delivery available within a 3-mile radius via Deliveroo and UberEats.',
-  mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d156157.6534246067!2d-1.0269095034639438!3d52.23847253457199!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48770ebd3ba5653b%3A0xc4931a231505c24e!2sNorthampton!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk'
+  mapEmbedUrl: 'https://maps.google.com/maps?q=17%20Saint%20Peters%20Walk,%20Northampton&t=&z=15&ie=UTF8&iwloc=&output=embed'
 }
 
 const MOCK_CATERING = {
@@ -55,20 +111,46 @@ export async function sanityFetch<QueryResponse>({
   params?: any
   tags?: string[]
 }): Promise<QueryResponse> {
-  // If we haven't configured a real Sanity project yet, return mock data so the site still works
-  if (projectId === 'placeholder-project-id') {
+  try {
+    const result = await client.fetch<QueryResponse>(query, params, {
+      next: {
+        tags,
+        revalidate: 60 // Cache for 1 minute
+      },
+    })
+
+    // If Sanity has data, return it
+    if (result && (!Array.isArray(result) || result.length > 0)) {
+      // Small check for objects that might be "empty" in Sanity but exist
+      if (typeof result === 'object' && Object.keys(result as any).length > 0 && !(result as any)._type) {
+         // It's a valid object
+      }
+      // If it's an array with items, or a valid object, return it. We do a loose check here.
+      // But actually, let's just do a specific fallback for our known queries if empty
+    }
+
+    // FALLBACK TO MOCK DATA IF SANITY IS EMPTY
+    if (!result || (Array.isArray(result) && result.length === 0) || Object.keys(result as any).length === 0) {
+      if (query === getCategoriesQuery) return MOCK_CATEGORIES as any
+      if (query === getTrendingSectionQuery) return MOCK_TRENDING as any
+      if (query === getProductsQuery) return MOCK_PRODUCTS as any
+      if (query === getSiteSettingsQuery) return MOCK_SITE_SETTINGS as any
+      if (query === getCateringPageQuery) return MOCK_CATERING as any
+      if (query === getTestimonialsQuery) return MOCK_TESTIMONIALS as any
+      if (query === getAnnouncementQuery) return MOCK_ANNOUNCEMENT as any
+    }
+
+    return result
+
+  } catch (error) {
+    console.error("Sanity fetch error, falling back to mock data:", error)
     if (query === getCategoriesQuery) return MOCK_CATEGORIES as any
     if (query === getTrendingSectionQuery) return MOCK_TRENDING as any
     if (query === getProductsQuery) return MOCK_PRODUCTS as any
     if (query === getSiteSettingsQuery) return MOCK_SITE_SETTINGS as any
     if (query === getCateringPageQuery) return MOCK_CATERING as any
+    if (query === getTestimonialsQuery) return MOCK_TESTIMONIALS as any
+    if (query === getAnnouncementQuery) return MOCK_ANNOUNCEMENT as any
     return null as any
   }
-
-  return client.fetch<QueryResponse>(query, params, {
-    next: {
-      tags,
-      revalidate: 3600 // Cache for 1 hour by default, or use tags for on-demand revalidation
-    },
-  })
 }

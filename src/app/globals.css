@@ -4,15 +4,20 @@
   --font-sans: var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fredoka), ui-sans-serif, system-ui, sans-serif;
 
-  /* Brand Colors based on food sections */
-  --color-brand-bubbletea: #d946ef; /* Fuchsia for vibrant bubble tea */
-  --color-brand-karak: #f59e0b; /* Amber for karak tea */
-  --color-brand-dessert: #ec4899; /* Pink for desserts */
-  --color-brand-protein: #84cc16; /* Lime green for healthy protein meals */
-  --color-brand-streetfood: #ef4444; /* Red for Indian street food */
-  
-  --color-brand-dark: #1c1917; /* stone-900 for text/dark mode */
-  --color-brand-light: #fafaf9; /* stone-50 for bg */
+  /* Primary Brand Palette */
+  --color-brand-dark: #11164A; /* Deep Navy */
+  --color-brand-light: #FFFFFF; /* White */
+  --color-brand-accent: #F20063; /* Bright Pink */
+  --color-brand-highlight: #FFC107; /* Mango Yellow/Amber */
+  --color-brand-panel: #D1EAF0; /* Sky blue */
+
+  /* Category Pastel Backgrounds */
+  --color-brand-bubbletea: #E9D1FF; /* Light Purple */
+  --color-brand-karak: #F0E0D0; /* Tan */
+  --color-brand-dessert: #FFD6E4; /* Light Pink (Ice Cream) */
+  --color-brand-protein: #D1EAF0; /* Light Blue */
+  --color-brand-streetfood: #FFE3C2; /* Light Orange (Snacks) */
+  --color-brand-samosa: #D4F1C7; /* Light Green */
 }
 
 @layer base {

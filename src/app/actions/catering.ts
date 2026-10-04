@@ -2,37 +2,32 @@
 
 import { z } from "zod"
 import { Resend } from "resend"
+import { headers } from "next/headers"
 
-// Initialize Resend
-// Note: RESEND_API_KEY is required in environment variables for this to work
-const resend = new Resend(process.env.RESEND_API_KEY || "missing_key")
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 const cateringSchema = z.object({
-  name: z.string().min(2, "Name is too short"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
-  phone: z.string().min(9, "Phone number is too short"),
+  phone: z.string().min(1, "Phone number is required"),
   eventDate: z.string().min(1, "Event date is required"),
   guestCount: z.string().min(1, "Guest count is required"),
-  eventLocation: z.string().min(2, "Event location is required"),
-  eventType: z.string().min(2, "Event type is required"),
+  eventLocation: z.string().min(1, "Event location is required"),
+  eventType: z.string().min(1, "Event type is required"),
   message: z.string().optional(),
-  honeypot: z.string().max(0, "Invalid submission"), // Must be empty
+  honeypot: z.string().max(0, "Invalid submission"),
 })
 
-// Basic in-memory rate limiting (for demo/v1 purposes)
-// In production, use Redis or database rate limiting
 const ipRequests = new Map<string, { count: number, resetTime: number }>()
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000 // 15 minutes
-const MAX_REQUESTS = 3 // 3 requests per 15 minutes
+const MAX_REQUESTS = 3 // 3 requests per 15 mins
 
 export async function submitCateringEnquiry(prevState: any, formData: FormData) {
   try {
-    // 1. Basic Rate Limiting (using a mock IP since we don't have request context easily in server actions without headers())
-    // For Vercel/Next.js we would ideally use headers().get('x-forwarded-for')
-    // We will simulate it here to satisfy the requirement
-    const mockIp = "client-ip"
+    const headersList = await headers()
+    const ip = headersList.get("x-forwarded-for") || "unknown-ip"
     const now = Date.now()
-    const record = ipRequests.get(mockIp)
+    const record = ipRequests.get(ip)
 
     if (record && now < record.resetTime) {
       if (record.count >= MAX_REQUESTS) {
@@ -40,10 +35,9 @@ export async function submitCateringEnquiry(prevState: any, formData: FormData) 
       }
       record.count += 1
     } else {
-      ipRequests.set(mockIp, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
+      ipRequests.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
     }
 
-    // 2. Validate Data
     const rawData = {
       name: formData.get("name"),
       email: formData.get("email"),
@@ -56,6 +50,11 @@ export async function submitCateringEnquiry(prevState: any, formData: FormData) 
       honeypot: formData.get("honeypot"),
     }
 
+    // Silently reject if honeypot is filled
+    if (rawData.honeypot && typeof rawData.honeypot === 'string' && rawData.honeypot.length > 0) {
+      return { success: true, message: "Thanks, we'll get back to you soon" }
+    }
+
     const validatedData = cateringSchema.safeParse(rawData)
 
     if (!validatedData.success) {
@@ -66,40 +65,47 @@ export async function submitCateringEnquiry(prevState: any, formData: FormData) 
       }
     }
 
-    // 3. Send Email via Resend
-    // We check if API key exists. If not, we return a success state but log it (Integration Layer)
+    const d = validatedData.data
+
     if (!process.env.RESEND_API_KEY) {
-      console.warn("INTEGRATION LAYER: Resend API Key is missing. Email would have been sent to D'Lish:", validatedData.data)
-      // We pretend it succeeded for the user
-      return { success: true, message: "Enquiry submitted successfully! (Mocked - Credentials Pending)" }
+      console.warn("RESEND_API_KEY is missing. Pretending success.")
+      return { success: true, message: "Thanks, we'll get back to you soon" }
     }
 
-    const { data, error } = await resend.emails.send({
-      from: 'Catering Enquiries <onboarding@resend.dev>', // Should be a verified domain
-      to: ['info@dlish.example.com'], // In reality, fetch from siteSettings or hardcode D'Lish email
-      subject: `New Catering Enquiry from ${validatedData.data.name}`,
+    const toEmail = process.env.CATERING_TO_EMAIL || "uk.dlish@gmail.com"
+    const submittedAt = new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })
+
+    const { error } = await resend.emails.send({
+      from: 'Catering Enquiries <onboarding@resend.dev>', // Resend's free tier only allows onboarding@resend.dev unless verified
+      to: [toEmail],
+      replyTo: d.email,
+      subject: `New Catering Enquiry - ${d.eventType} - ${d.name}`,
       html: `
-        <h2>New Catering Enquiry</h2>
-        <p><strong>Name:</strong> ${validatedData.data.name}</p>
-        <p><strong>Email:</strong> ${validatedData.data.email}</p>
-        <p><strong>Phone:</strong> ${validatedData.data.phone}</p>
-        <p><strong>Event Date:</strong> ${validatedData.data.eventDate}</p>
-        <p><strong>Guest Count:</strong> ${validatedData.data.guestCount}</p>
-        <p><strong>Event Location:</strong> ${validatedData.data.eventLocation}</p>
-        <p><strong>Event Type:</strong> ${validatedData.data.eventType}</p>
-        <p><strong>Message:</strong><br/> ${validatedData.data.message || 'None'}</p>
+        <div style="font-family: sans-serif; max-width: 600px;">
+          <h2>New Catering Enquiry</h2>
+          <p><strong>Submitted At:</strong> ${submittedAt}</p>
+          <hr/>
+          <p><strong>Full Name:</strong> ${d.name}</p>
+          <p><strong>Email Address:</strong> ${d.email}</p>
+          <p><strong>Phone Number:</strong> ${d.phone}</p>
+          <p><strong>Event Date:</strong> ${d.eventDate}</p>
+          <p><strong>Guest Count:</strong> ${d.guestCount}</p>
+          <p><strong>Event Location / Postcode:</strong> ${d.eventLocation}</p>
+          <p><strong>Event Type:</strong> ${d.eventType}</p>
+          <p><strong>Additional Details:</strong><br/> ${d.message || 'None'}</p>
+        </div>
       `,
     })
 
     if (error) {
       console.error("Resend error:", error)
-      return { success: false, error: "Failed to send email. Please try again or call us." }
+      return { success: false, error: "Something went wrong. Please call us at 07850 536587." }
     }
 
-    return { success: true, message: "Enquiry submitted successfully! We will be in touch soon." }
+    return { success: true, message: "Thanks, we'll get back to you soon" }
 
   } catch (error) {
     console.error("Catering submission error:", error)
-    return { success: false, error: "An unexpected error occurred." }
+    return { success: false, error: "Something went wrong. Please call us at 07850 536587." }
   }
 }

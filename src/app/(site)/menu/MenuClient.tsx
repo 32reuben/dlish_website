@@ -85,7 +85,10 @@ export function MenuClient({ sections }: { sections: Section[] }) {
       <div className="space-y-20 pb-20">
         {sections.map((section) => (
           <section key={section.id} id={section.id} className="scroll-mt-40">
-            <h2 className="font-display text-4xl font-bold text-brand-dark mb-8 tracking-tight">{section.name}</h2>
+            <div className="flex items-center gap-4 mb-8">
+              <h2 className="font-display text-4xl font-bold text-brand-dark tracking-tight">{section.name}</h2>
+              {section.id === 'milk-shakes' && <span className="text-stone-500 font-bold mt-2">Large +£1.50</span>}
+            </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {section.products.map((product) => (

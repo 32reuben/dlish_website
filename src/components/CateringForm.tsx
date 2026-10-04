@@ -23,7 +23,7 @@ export function CateringForm() {
         </div>
         <h3 className="text-2xl font-bold text-brand-dark mb-4">Request Sent!</h3>
         <p className="text-stone-600 mb-8 max-w-md">
-          {state?.message || "Thanks for your enquiry! Our team will get back to you within 24 hours to discuss your event."}
+          {state?.message || "Thanks, we'll get back to you soon"}
         </p>
         <Button variant="outline" onClick={() => setIsSuccess(false)}>Send Another Enquiry</Button>
       </div>
