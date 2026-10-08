@@ -23,7 +23,6 @@ export async function Navigation() {
           <Link href="/menu" className="hover:text-brand-bubbletea transition-colors">Menu</Link>
           <Link href="/catering" className="hover:text-brand-streetfood transition-colors">Catering & Events</Link>
           <Link href="/find-us" className="hover:text-brand-karak transition-colors">Find Us</Link>
-          <OrderButton settings={settings} label="Order Online" variant="primary" className="h-10 rounded-full px-6" />
         </nav>
 
         {/* Actions */}
