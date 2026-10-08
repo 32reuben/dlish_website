@@ -15,8 +15,25 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dilishnorthampton.com"),
   title: "D'Lish | Fresh flavours. Serious cravings.",
   description: "D'LISH: Street Food • Bubble Tea • Karak • Desserts • Protein Meals in Northampton, UK.",
+  openGraph: {
+    title: "D'Lish | Fresh flavours. Serious cravings.",
+    description: "D'LISH: Street Food • Bubble Tea • Karak • Desserts • Protein Meals in Northampton, UK.",
+    url: "https://dilishnorthampton.com",
+    siteName: "D'Lish",
+    images: [
+      {
+        url: "/logo-main.png",
+        width: 800,
+        height: 600,
+        alt: "D'Lish Logo",
+      },
+    ],
+    locale: "en_GB",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
