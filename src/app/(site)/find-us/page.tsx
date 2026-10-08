@@ -33,7 +33,7 @@ export default async function FindUsPage() {
               <h3 className="font-bold text-xl mb-1 text-brand-dark">Address</h3>
               <p className="text-stone-600 whitespace-pre-line">{settings?.address}</p>
               <Button variant="outline" size="sm" className="mt-3" asChild>
-                <a href={settings?.mapsLink || `https://maps.google.com/?q=${encodeURIComponent(settings?.address || 'Northampton')}`} target="_blank" rel="noopener noreferrer">
+                <a href="https://maps.app.goo.gl/ExvHKXzqqBBmeBcG6" target="_blank" rel="noopener noreferrer">
                   <Navigation className="w-4 h-4 mr-2" /> Get Directions
                 </a>
               </Button>
