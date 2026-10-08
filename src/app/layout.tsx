@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka, Quicksand } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const fredoka = Fredoka({
@@ -44,6 +45,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans bg-brand-light text-brand-dark min-h-screen flex flex-col selection:bg-brand-accent selection:text-white">
         {children}
+        <Analytics />
       </body>
     </html>
   );
