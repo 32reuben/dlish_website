@@ -28,21 +28,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${fredoka.variable} ${quicksand.variable} antialiased`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('scrollRestoration' in history) {
-                history.scrollRestoration = 'manual';
-              }
-              window.onbeforeunload = function () {
-                window.scrollTo(0, 0);
-              };
-              window.scrollTo(0, 0);
-            `,
-          }}
-        />
-      </head>
       <body className="font-sans bg-brand-light text-brand-dark min-h-screen flex flex-col selection:bg-brand-accent selection:text-white">
         {children}
         <Analytics />

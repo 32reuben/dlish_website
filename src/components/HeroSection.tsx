@@ -122,25 +122,19 @@ export function HeroSection({ settings }: HeroProps) {
   const opacityHero = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const scaleHero = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
 
-  const [videoFinished, setVideoFinished] = useState(false);
-
   return (
     <section ref={containerRef} className="relative bg-[#fdf9f1] overflow-hidden min-h-screen flex flex-col justify-start pt-16 md:pt-28 pb-0">
       
-      {/* Cinematic Video Intro (Plays once then fades out) */}
-      <motion.div 
-        initial={{ opacity: 0.9 }}
-        animate={{ opacity: videoFinished ? 0 : 0.9 }}
-        transition={{ duration: 1.5, ease: "easeInOut" }}
-        className="absolute inset-x-0 top-0 h-[75vh] z-0 overflow-hidden mix-blend-multiply pointer-events-none"
-      >
+      {/* Ambient Video Background (Looping seamlessly) */}
+      <div className="absolute inset-x-0 top-0 h-[80vh] z-0 overflow-hidden pointer-events-none">
         {/* Mobile Video (9:16) */}
         <video 
           autoPlay 
           muted 
+          loop
           playsInline 
-          onEnded={() => setVideoFinished(true)}
-          className="w-full h-full object-cover object-center block md:hidden"
+          preload="auto"
+          className="w-full h-full object-cover object-center opacity-40 block md:hidden"
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
@@ -149,16 +143,17 @@ export function HeroSection({ settings }: HeroProps) {
         <video 
           autoPlay 
           muted 
+          loop
           playsInline 
-          onEnded={() => setVideoFinished(true)}
-          className="w-full h-full object-cover object-center hidden md:block"
+          preload="auto"
+          className="w-full h-full object-cover object-center opacity-40 hidden md:block"
         >
           <source src="/hero-video-desktop.mp4" type="video/mp4" />
         </video>
 
-        {/* Gradient mask so the video fades out smoothly at the bottom before hitting the milkshakes */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#fdf9f1] to-transparent" />
-      </motion.div>
+        {/* Gradient mask so video blends smoothly into the page content */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#fdf9f1]/60 via-[#fdf9f1]/35 to-[#fdf9f1]" />
+      </div>
 
       {/* Decorative Vectors from screenshot */}
       <div className="absolute right-[5%] md:right-[15%] top-[25%] hidden lg:block opacity-80 pointer-events-none z-10">
@@ -176,16 +171,12 @@ export function HeroSection({ settings }: HeroProps) {
         className="container mx-auto max-w-4xl text-center relative z-10 px-4 sm:px-6 flex flex-col items-center pb-12 md:pb-20"
         style={!shouldReduceMotion ? { opacity: opacityHero, scale: scaleHero } : {}}
       >
-        {/* Text Elements (Hidden while video is playing) */}
+        {/* Text Elements (Always visible immediately) */}
         <motion.div 
           className="flex flex-col items-center w-full"
-          initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-          animate={{ 
-            opacity: videoFinished ? 1 : 0,
-            y: videoFinished ? 0 : 20,
-            filter: videoFinished ? 'blur(0px)' : 'blur(10px)'
-          }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <div className="relative inline-block group">
             <Badge className="mb-4 md:mb-6 bg-pink-100 hover:bg-pink-100 text-pink-600 border-none px-5 py-2 text-xs font-bold uppercase tracking-widest shadow-sm flex items-center gap-2 rounded-full">
@@ -206,14 +197,14 @@ export function HeroSection({ settings }: HeroProps) {
                 <span key={i} className="inline-block relative">
                   <span className="relative z-10">{word}</span>
                   {/* Hand-drawn underline from screenshot */}
-                  {i === 0 && !shouldReduceMotion && videoFinished && (
+                  {i === 0 && !shouldReduceMotion && (
                     <motion.svg 
                       className="absolute -bottom-1 left-0 w-full h-4 z-0" 
                       viewBox="0 0 100 10" 
                       preserveAspectRatio="none"
                       initial={{ pathLength: 0, opacity: 0 }}
                       animate={{ pathLength: 1, opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                      transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                     >
                       <path d="M0,5 Q50,9 100,2" stroke="#f43f5e" strokeWidth="4" fill="none" strokeLinecap="round" />
                     </motion.svg>

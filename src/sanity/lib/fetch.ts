@@ -72,7 +72,7 @@ const MOCK_TRENDING = {
 
 const MOCK_ANNOUNCEMENT = {
   isActive: true,
-  text: "Coming back 8 October. Open 9 AM to 7 PM."
+  text: "Open Daily 9 AM to 7 PM • Northampton"
 }
 
 // MOCK_SITE_SETTINGS
